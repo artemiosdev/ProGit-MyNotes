@@ -24,12 +24,14 @@
 -***Индексирован (staged)*** изменённый файл в его текущей версии, отмеченный для включения в следующий коммит.   
 -***Зафиксирован (committed)*** файл уже сохранён в вашей локальной базе.
 
+sequenceDiagram
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+Alice -> Bob:Another authentication Response
+Bob --> Alice: Another authentication Response
+
 Рабочая копия, область индексирования и каталог Git
-```sequence
-Working directory->Staging area: Stage Fixes
-Staging area-->.git directory (Repository): Commit
-.git directory (Repository)-->>Working directory: Checkout the project
-```
+![Рабочая копия, область индексирования и каталог Git](/Users/flyboroda/Documents/MyGit/ProGit/images/Screenshot 2022-02-18 в 22.30.59.jpg)
 
 Рабочая копия является снимком одной версии проекта. Эти файлы извлекаются из сжатой базы данных в каталоге Git и помещаются на диск, для того чтобы их можно было использовать или редактировать.   
 **Область индексирования** — это файл, обычно находящийся в каталоге Git, в нём содержится информация о том, что попадёт в следующий коммит. Её техническое название на языке Git — «индекс», но фраза «область индексирования» также работает.

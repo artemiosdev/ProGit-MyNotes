@@ -804,14 +804,64 @@ git log --oneline --decorate --graph --all
 
 ---
 ### Основы ветвления и слияния
+
+<img alt="image" src="images/Screenshot 2022-02-20 в 19.54.15.jpg"> </img>
+
+Вы решаете, что теперь вы будете заниматься проблемой `#53` из вашей системы отслеживания ошибок. Чтобы создать ветку и сразу переключиться на нее, можно выполнить команду `git checkout` с параметром `-b`:
+
+```bash
+git checkout -b iss53
+  Switched to a new branch "iss53"
+```
+Это то же самое что и: 
+
+```bash
+git branch iss53
+git checkout iss53
+```
+
+<img alt="image" src="images/Screenshot 2022-02-20 в 19.56.40.jpg"> </img>
+
+Вы работаете над своим сайтом и делаете коммиты. Это приводит к тому, что ветка `iss53`
+движется вперед, так как вы переключились на нее ранее (`HEAD` указывает на нее). 
+
+```bash
+vim index.html
+git commit -a -m 'Create new footer [issue 53]'
+```
+
+<img alt="image" src="images/Screenshot 2022-02-20 в 19.58.05.jpg"> </img>
+
 Имейте в виду, что если рабочий каталог либо индекс содержат незафиксированные изменения, конфликтующие с веткой, на которую вы хотите переключиться, то Git не позволит переключить ветки. Лучше всего переключаться из чистого рабочего состояния проекта. Есть способы обойти это (припрятать изменения `stash` или добавить их в последний коммит `amend`), но об этом мы поговорим позже в разделе ***Припрятывание и очистка главы 7***
+
+Давайте создадим новую ветку для исправления, в которой будем работать, пока не закончим исправление
+
+```bash
+git checkout -b hotfix
+  Switched to a new branch 'hotfix'
+vim index.html
+git commit -a -m 'Fix broken email address'
+  [hotfix 1fb7853] Fix broken email address
+```
+
+<img alt="image" src="images/Screenshot 2022-02-20 в 20.01.03.jpg"> </img>
 
 Чтобы выполнить слияние ветки `hotfix` с веткой `master` для включения изменений в продукт. Это делается командой `git merge`:
 
 ```bash
 git checkout master
 git merge hotfix
+Updating f42c576..3a0874c
+  Fast-forward
+   index.html | 2 ++
+   1 file changed, 2 insertions(+)
 ```
+
+Заметили фразу `fast-forward` в этом слиянии? Git просто переместил указатель ветки вперед, потому что коммит C4, на который указывает слитая ветка `hotfix`, был прямым потомком коммита C2, на котором вы находились до этого. Другими словами, если коммит сливается с тем, до которого можно добраться двигаясь по истории прямо, Git упрощает слияние просто перенося указатель ветки вперед, так как нет расхождений в изменениях. Это называется `fast-forward`.
+
+Теперь ваши изменения включены в коммит, на который указывает ветка `master`, и исправление можно внедрять.
+
+<img alt="image" src="images/Screenshot 2022-02-20 в 20.03.47.jpg"> </img>
 
 После внедрения исправления из ранее созданной ветки, нужно удалить ветку `hotfix`, потому что она больше не нужна — ветка `master` указывает на то же самое место. Для удаления ветки выполните команду `git branch` с параметром `-d`:
 
@@ -819,6 +869,19 @@ git merge hotfix
 git branch -d hotfix
   Deleted branch hotfix (3a0874c)
 ```
+
+Теперь вы можете переключиться обратно на ветку `iss53` и продолжить работу над проблемой `#53`:
+
+```bash
+git checkout iss53
+  Switched to branch "iss53"
+vim index.html
+git commit -a -m 'Finish the new footer [issue 53]'
+  [iss53 ad82d7a] Finish the new footer [issue 53]
+  1 file changed, 1 insertion(+)
+```
+
+<img alt="image" src="images/Screenshot 2022-02-20 в 20.05.13.jpg"> </img>
 
 ---
 ### Основы слияния

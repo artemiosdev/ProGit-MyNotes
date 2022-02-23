@@ -2244,6 +2244,68 @@ git shortlog --no-merges master --not v1.0.1
 
 ---
 ### Создание запроса на слияние
+Тони ищет, чего бы запустить на своём новеньком Arduino. Кажется, он нашёл классный пример на [https://github.com/schacon/blink](https://github.com/schacon/blink).
+
+Для начала, нажмите кнопку `Fork`, как было сказано выше, чтобы заполучить собственную копию проекта. Мы зарегистрированы на GitHub под именем `tonychacon`, так что наша копия окажется по адресу [https://github.com/tonychacon/blink](https://github.com/tonychacon/blink), где мы сможем редактировать её. Мы клонируем его, создадим тематическую ветку, внесём необходимые изменения и, наконец, отправим их на GitHub.
+
+```bash
+$ git clone https://github.com/tonychacon/blink (1) Cloning into 'blink'...
+$ cd blink
+$ git checkout -b slow-blink (2) Switched to a new branch 'slow-blink'
+$ sed -i '' 's/1000/3000/' blink.ino (macOS) (3) # If you're on a Linux system, do this instead: # $ sed -i 's/1000/3000/' blink.ino (3)
+$ git diff --word-diff (4)
+diff --git a/blink.ino b/blink.ino
+index 15b9911..a6cc5a5 100644
+--- a/blink.ino
++++ b/blink.ino
+@@ -18,7 +18,7 @@ void setup() {
+// the loop routine runs over and over again forever: void loop() {
+    digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+    [-delay(1000);-]{+delay(3000);+}               // wait for a second
+    digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+    [-delay(1000);-]{+delay(3000);+}               // wait for a second
+}
+
+$ git commit -a -m 'Change delay to 3 seconds' (5) [slow-blink 5ca509d] Change delay to 3 seconds
+   1 file changed, 2 insertions(+), 2 deletions(-)
+$ git push origin slow-blink (6)
+Username for 'https://github.com': tonychacon
+Password for 'https://tonychacon@github.com':
+Counting objects: 5, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 340 bytes | 0 bytes/s, done. Total 3 (delta 1), reused 0 (delta 0)
+To https://github.com/tonychacon/blink
+   * [new branch]      slow-blink -> slow-blink
+```
+
+1. Клонируем нашу копию
+2. Создаём тематическую ветку
+3. Вносим свои изменения
+4. Проверяем изменения
+5. Фиксируем изменения в тематической ветку
+6. Отправляем новую ветку в нашу копию на GitHub
+
+Теперь, если мы зайдём на страничку нашей копии на GitHub, мы увидим, что GitHub заметил наши изменения и предлагает открыть запрос на слияние с помощью большой зелёной кнопки.
+Также можно зайти на страницу `Branches`, по адресу `https://github.com/<user>/<project>/branches`, найти интересующую ветку и открыть запрос оттуда.
+
+<img alt="image" src="images/Screenshot 2022-02-23 в 23.57.23.jpg"> </img>
+
+Мы увидим список коммитов в нашей тематической ветке, «опередивших» ветку `master` (в данном случае всего один коммит) и предпросмотр всех изменений, вносимых этими коммитами.
+
+После создания запроса на слияние (путём нажатия кнопки `Create pull request` на этой странице) владелец форкнутого проекта получит уведомление о предложенных изменениях со ссылкой на страницу с информацией о запросе.
+
+### Обработка запроса на слияние
+На этом этапе, владелец проекта может просмотреть предложенные изменения, принять, отклонить или прокомментировать их.
+
+Владелец проекта может просмотреть суммарные изменения, вносимые запросом, и прокомментировать любую отдельно взятую строку.
+
+Как только владелец прокомментирует изменения, автор запроса на слияние (а также все подписавшиеся на этот репозиторий) получат уведомления. 
+
+GitHub так же проверяет может ли запрос на слияние быть применён без конфликтов и предоставляет кнопку для осуществления слияния на сервере. Эта кнопка отображается только если у вас есть права на запись в репозиторий и возможно простейшее слияние. По нажатию на неё GitHub произведёт `non-fast-forward` слияние, что значит даже если слияние может быть осуществлено перемоткой вперед, всё равно будет создан коммит слияния.
+
+
+
 
 
 
